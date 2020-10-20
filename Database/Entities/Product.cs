@@ -13,6 +13,6 @@ namespace Database.Entities
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-        public List<Bill> Bills { get; set; }
+        public List<ProductBill> ProductsBills { get; set; }
     }
 }

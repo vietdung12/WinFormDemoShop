@@ -31,15 +31,10 @@ namespace Database.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Bills");
                 });
@@ -93,6 +88,21 @@ namespace Database.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Database.Entities.ProductBill", b =>
+                {
+                    b.Property<int>("BillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BillId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProducstBills");
+                });
+
             modelBuilder.Entity("Database.Entities.User", b =>
                 {
                     b.Property<string>("UserName")
@@ -114,20 +124,26 @@ namespace Database.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Database.Entities.Bill", b =>
-                {
-                    b.HasOne("Database.Entities.Product", "Product")
-                        .WithMany("Bills")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Database.Entities.Product", b =>
                 {
                     b.HasOne("Database.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Database.Entities.ProductBill", b =>
+                {
+                    b.HasOne("Database.Entities.Bill", "Bill")
+                        .WithMany("ProductsBills")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Product", "Product")
+                        .WithMany("ProductsBills")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

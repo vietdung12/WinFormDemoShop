@@ -15,9 +15,7 @@ namespace Database.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.Quantity).IsRequired();
-            builder.Property(x => x.DateCreated).IsRequired();
-
-            builder.HasOne(x => x.Product).WithMany(x => x.Bills).HasForeignKey(x => x.ProductId);
+            builder.Property(x => x.DateCreated).IsRequired();           
         }
     }
 }

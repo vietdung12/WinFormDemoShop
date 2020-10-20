@@ -19,7 +19,7 @@ namespace Database.EF
             modelBuilder.ApplyConfiguration(new ProductsConfiguration());
             modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new BillsConfiguration());
-
+            modelBuilder.ApplyConfiguration(new ProductsBillsConfiguration());
 
         }
 
@@ -27,5 +27,6 @@ namespace Database.EF
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Bill> Bills { get; set; }
+        public DbSet<ProductBill> ProductsBills { get; set; }
     }
 }
