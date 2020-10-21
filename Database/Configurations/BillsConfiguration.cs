@@ -13,8 +13,7 @@ namespace Database.Configurations
         {
             builder.ToTable("Bills");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.Quantity).IsRequired();
+            builder.Property(x => x.Id).UseIdentityColumn();            
             builder.Property(x => x.DateCreated).IsRequired();           
         }
     }

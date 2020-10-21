@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Database.Migrations
 {
-    public partial class Inital : Migration
+    public partial class inital : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,6 @@ namespace Database.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -70,32 +69,53 @@ namespace Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProducstBills",
+                name: "BillInfos",
                 columns: table => new
                 {
+                    BillId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
-                    BillId = table.Column<int>(nullable: false)
+                    Quantity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProducstBills", x => new { x.BillId, x.ProductId });
+                    table.PrimaryKey("PK_BillInfos", x => new { x.BillId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_ProducstBills_Bills_BillId",
+                        name: "FK_BillInfos_Bills_BillId",
                         column: x => x.BillId,
                         principalTable: "Bills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProducstBills_Products_ProductId",
+                        name: "FK_BillInfos_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Kính mát" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserName", "DisplayName", "Password" },
+                values: new object[] { "admin", "Admin", "Admin@123" });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "CategoryId", "Name", "Price", "Quantity" },
+                values: new object[] { 1, 1, "kính 50k", 50000f, 50 });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "CategoryId", "Name", "Price", "Quantity" },
+                values: new object[] { 2, 1, "kính 60k", 60000f, 60 });
+
             migrationBuilder.CreateIndex(
-                name: "IX_ProducstBills_ProductId",
-                table: "ProducstBills",
+                name: "IX_BillInfos_ProductId",
+                table: "BillInfos",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -107,7 +127,7 @@ namespace Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProducstBills");
+                name: "BillInfos");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
-    [Migration("20201020114733_Inital")]
-    partial class Inital
+    [Migration("20201021020834_inital")]
+    partial class inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,12 +33,27 @@ namespace Database.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Bills");
+                });
+
+            modelBuilder.Entity("Database.Entities.BillInfo", b =>
+                {
+                    b.Property<int>("BillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("BillId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BillInfos");
                 });
 
             modelBuilder.Entity("Database.Entities.Category", b =>
@@ -58,6 +73,13 @@ namespace Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Kính mát"
+                        });
                 });
 
             modelBuilder.Entity("Database.Entities.Product", b =>
@@ -88,21 +110,24 @@ namespace Database.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-                });
 
-            modelBuilder.Entity("Database.Entities.ProductBill", b =>
-                {
-                    b.Property<int>("BillId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BillId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProducstBills");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Name = "kính 50k",
+                            Price = 50000f,
+                            Quantity = 50
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Name = "kính 60k",
+                            Price = 60000f,
+                            Quantity = 60
+                        });
                 });
 
             modelBuilder.Entity("Database.Entities.User", b =>
@@ -124,6 +149,29 @@ namespace Database.Migrations
                     b.HasKey("UserName");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserName = "admin",
+                            DisplayName = "Admin",
+                            Password = "Admin@123"
+                        });
+                });
+
+            modelBuilder.Entity("Database.Entities.BillInfo", b =>
+                {
+                    b.HasOne("Database.Entities.Bill", "Bill")
+                        .WithMany("BillInfos")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Product", "Product")
+                        .WithMany("BillInfos")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Database.Entities.Product", b =>
@@ -131,21 +179,6 @@ namespace Database.Migrations
                     b.HasOne("Database.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Database.Entities.ProductBill", b =>
-                {
-                    b.HasOne("Database.Entities.Bill", "Bill")
-                        .WithMany("ProductsBills")
-                        .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Database.Entities.Product", "Product")
-                        .WithMany("ProductsBills")
-                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
